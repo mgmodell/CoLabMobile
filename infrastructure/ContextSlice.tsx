@@ -122,6 +122,7 @@ const CONFIG = {
         return axios.get( endPointsUrl + '.json',
             { withCredentials: true } )
             .then( resp =>{
+                console.log( 'resp', resp )
                 if( resp['data'][ 'logged_in'] ){
                     dispatch( setLoggedIn(
                         resp['data']['lookups'],
