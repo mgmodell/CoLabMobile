@@ -3,17 +3,16 @@
  * https://github.com/lynndylanhurley/j-toker
  */
 import axios from 'axios';
-import {Cookies} from 'react-cookie-consent';
 
 import {fetchProfile, setProfile, clearProfile} from './ProfileSlice';
 import {addMessage, Priorities} from './StatusSlice';
 import i18n from './i18n';
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
 const category = 'devise';
 const t = i18n.getFixedT( null, category );
-const cookiesEnabled = navigator.cookieEnabled;
 
 const CONFIG = {
     SAVED_CREDS_KEY:    'colab_authHeaders',
@@ -21,10 +20,6 @@ const CONFIG = {
     SIGN_OUT_PATH:      '/auth/sign_out',
     EMAIL_SIGNIN_PATH:  '/auth/sign_in',
     EMAIL_REGISTRATION_PATH: '/auth',
-
-    //Cooke paths
-    cookieExpiry:       14,
-    cookiePath:         '/',
 
     tokenFormat: {
         "access-token": "{{ access-token }}",
@@ -95,15 +90,9 @@ const CONFIG = {
         return true;
     },
 
+    //Layer of indirection to support AsyncStorage - probably unnecessary
     retrieveData( key ){
-        var val = null;
-
-        if( cookiesEnabled ){
-            val = Cookies.get( key );
-
-        } else {
-            val = localStorage.getItem(key);
-        }
+        const val = getData( key );
 
         // if value is a simple string, the parser will fail. in that case, simply
         // unescape the quotes and return the string.
@@ -112,35 +101,19 @@ const CONFIG = {
           return JSON.parse( val );
         } catch (err) {
           // unescape quotes
-          return val && val.replace(/("|')/g, '');
+          return val ; // && val.replace(/("|')/g, '');
         }
 
     },
 
     persistData: function( key : string, val ){
         let data = JSON.stringify( val );
-
-        if( cookiesEnabled ){
-            Cookies.set( key, data,
-                {
-                    expires: CONFIG.cookieExpiry,
-                    path: CONFIG.cookiePath
-                } )
-        } else {
-            localStorage.setItem(key, data);
-        }
-
+        storeData( key, val );
 
     },
 
     deleteData: function( key : string ){
-
-        if( cookiesEnabled ){
-            Cookies.remove( key )
-        }
-        localStorage.removeItem(key);
-
-
+        removeData( key );
     },
 
     retrieveResources: function( dispatch: Function, getState: Function ){
@@ -170,6 +143,37 @@ const CONFIG = {
 
 }
 
+const storeData = async (key: string, value: string) => {
+    try {
+      await AsyncStorage.setItem(key, value);
+    } catch (e) {
+      // saving error
+        console.log( 'error saving', e );
+    }
+  }
+
+const getData = async (key: string) => {
+    try {
+      const value = await AsyncStorage.getItem(key);
+      if(value !== null) {
+        return value;
+        // value previously stored
+      }
+    } catch(e) {
+      // error reading value
+        console.log( 'error reading', e );
+    }
+}
+
+const removeData = async (key: string) =>{
+    try {
+        await AsyncStorage.removeItem( key );
+    } catch(e) {
+        // remove error
+        console.log( 'error removing', e );
+    }
+}
+  
 export interface ContextRootState {
     status: {
         initialised: boolean;

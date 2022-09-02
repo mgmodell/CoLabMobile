@@ -61,7 +61,7 @@ const Section = ({children, title}): Node => {
 const App: () => Node = () => {
   const isDarkMode = useColorScheme() === 'dark';
 
-  const getEndpointsUrl = '/infra/endpoints';
+  const getEndpointsUrl = 'http://localhost:3000/infra/endpoints';
 
   const store = configureStore({
     reducer: appStatus
