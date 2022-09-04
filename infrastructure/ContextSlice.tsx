@@ -272,15 +272,10 @@ const contextSlice = createSlice({
             reducer: (state, action) =>{
                 state.status.loggingIn = false;
                 state.status.loggedIn = false;
-                state.lookups = action.payload.lookups;
-                state.endpoints = action.payload.endpoints;
+                state.lookups = { };
+                state.endpoints = { };
                 state.status.endpointsLoaded = true;
-            },
-            prepare: (lookups: object, endpoints: object ) =>{
-                return{
-                    lookups: lookups,
-                    endpoints: endpoints
-                }
+                state.status.initialised = false;
             }
         },
         setEndPoints: {
@@ -435,6 +430,7 @@ export const signOut = createAsyncThunk(
             return axios.delete( CONFIG.SIGN_OUT_PATH, {} )
             .then( resp=>{
                 dispatch( clearProfile() );
+                dispatch( setLoggedOut( ) );
                 CONFIG.deleteData( CONFIG.SAVED_CREDS_KEY );
                 CONFIG.retrieveResources( dispatch, getState )
                     .then( () =>{

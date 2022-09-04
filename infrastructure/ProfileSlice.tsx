@@ -112,7 +112,6 @@ const profileSlice = createSlice({
     clearProfile: {
       reducer: (state, action) => {
         state = initialState;
-        state.lastRetrieved = null;
       }
     }
   }
