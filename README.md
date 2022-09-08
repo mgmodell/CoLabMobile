@@ -1,7 +1,5 @@
 1. **Navigate to the working directory on your computer.**
 	- cd dev
-	- dev ls
-	- clm   colab
 	- dev clm
 	- clm git:(main)
 
@@ -23,11 +21,13 @@
 	- clm git:(main) asdf install
 
 7. **If the following error message occurs**
-*Missing one or more of the following dependencies: tar, gpg*
-		then   - clm git:(main) brew install gpg
-	If no error message then proceed to step 8.
+   
+*Missing one or more of the following dependencies: tar, gpg* then
+
+   - clm git:(main) brew install gpg
+	**If no error message then proceed to step 8.**
 		
-8. **Switch to IOS**
+1. **Switch to IOS**
 
 	- clm git:(main) ios
 
