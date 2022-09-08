@@ -25,6 +25,7 @@
 *Missing one or more of the following dependencies: tar, gpg* then
 
    - clm git:(main) brew install gpg
+  
 	**If no error message then proceed to step 8.**
 		
 1. **Switch to IOS**
@@ -44,7 +45,8 @@
 11. **Run npx command.**
 
 	- clm git:(main) npx react-native run-ios —verbose
-		**If success then skip the following steps.**
+  
+	**If success then skip the following steps.**
 
 12. **Navigate to iOS and install pod**
 
