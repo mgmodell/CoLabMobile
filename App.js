@@ -6,12 +6,11 @@
  * @flow strict-local
  */
 
-import React from 'react';
+import React, { startTransition, Suspense } from 'react';
 import type {Node} from 'react';
 import {
   SafeAreaView,
   ScrollView,
-  StatusBar,
   StyleSheet,
   Text,
   useColorScheme,
@@ -27,9 +26,23 @@ import {
 } from 'react-native/Libraries/NewAppScreen';
 
 import { Provider } from "react-redux";
+import { 
+  NativeRouter as Router,
+  Routes,
+  Route,
+  useParams
+ } from "react-router-native";
+ import { SafeAreaProvider } from 'react-native-safe-area-context';
+
+
 import { configureStore } from "@reduxjs/toolkit";
 import appStatus from "./infrastructure/AppReducers";
 import AppInit from './infrastructure/AppInit';
+import RequireAuth from "./infrastructure/RequireAuth";
+import RequireInstructor from "./infrastructure/RequireInstructor";
+import AppHeader from './AppHeader';
+import SignIn from './SignIn';
+import Skeleton from './util/Skeleton';
 
 const Section = ({children, title}): Node => {
   const isDarkMode = useColorScheme() === 'dark';
@@ -67,42 +80,56 @@ const App: () => Node = () => {
     reducer: appStatus
   })
 
+
   const backgroundStyle = {
     backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
   };
 
   return (
+    <SafeAreaProvider>
+
     <Provider store={store}>
+      <AppHeader />
       <AppInit endpointsUrl={getEndpointsUrl}>
     <SafeAreaView style={backgroundStyle}>
-      <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
+      <AppHeader />
       <ScrollView
         contentInsetAdjustmentBehavior="automatic"
         style={backgroundStyle}>
-        <Header />
         <View
           style={{
             backgroundColor: isDarkMode ? Colors.black : Colors.white,
           }}>
-          <Section title="Step One">
-            I edit <Text style={styles.highlight}>App.js</Text> to change this
-            screen and then come back to see your edits.
-          </Section>
-          <Section title="See Your Changes">
-            <ReloadInstructions />
-          </Section>
-          <Section title="Debug">
-            <DebugInstructions />
-          </Section>
-          <Section title="Learn More">
-            Read the docs to discover what to do next:
-          </Section>
-          <LearnMoreLinks />
         </View>
+        <Router>
+          <Routes>
+
+          <Route
+                    path="/"
+                    element={
+                      <RequireAuth>
+                        <h1>Dennis will build this</h1>
+                      </RequireAuth>
+                    }
+                  />
+          <Route path="login"
+          element={
+            <Suspense fallback={<Skeleton /> } >
+              <SignIn />
+            </Suspense>
+            /*
+            startTransition(()=>{
+              return(<SignIn />)
+            })
+            */
+          } />
+          </Routes>
+        </Router>
       </ScrollView>
     </SafeAreaView>
  </AppInit>
  </Provider>
+    </SafeAreaProvider>
   );
 };
 

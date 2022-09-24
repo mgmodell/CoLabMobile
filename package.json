@@ -12,16 +12,24 @@
   "dependencies": {
     "@react-native-async-storage/async-storage": "^1.17.10",
     "@reduxjs/toolkit": "^1.8.5",
+    "@rneui/base": "^4.0.0-rc.6",
+    "@rneui/themed": "^4.0.0-rc.6",
     "axios": "^0.27.2",
+    "email-validator": "^2.0.4",
     "i18next": "^21.9.1",
     "i18next-fetch-backend": "^5.0.1",
     "i18next-intervalplural-postprocessor": "^3.0.0",
     "i18next-react-native-async-storage": "^1.0.4",
     "prop-types": "^15.8.1",
     "react": "18.0.0",
+    "react-google-login": "^5.2.2",
     "react-i18next": "^11.18.5",
     "react-native": "0.69.5",
-    "react-redux": "^8.0.2"
+    "react-native-safe-area-context": "^4.3.3",
+    "react-native-svg": "^13.1.0",
+    "react-native-vector-icons": "^9.2.0",
+    "react-redux": "^8.0.2",
+    "react-router-native": "^6.3.0"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9",

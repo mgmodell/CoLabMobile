@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import PropTypes from "prop-types";
 import { useTypedSelector } from "./AppReducers";
+import { LinearProgress } from "@rneui/themed";
 
 export default function WorkingIndicator(props) {
 
@@ -20,7 +21,7 @@ export default function WorkingIndicator(props) {
   })
 
   return ( working > 0 ? (
-    <h1>Loader Status: #{props.identifier || "waiting"} />
+    <LinearProgress id={props.identifier || 'waiting' } />
   ) : null )
 }
 WorkingIndicator.propTypes = {

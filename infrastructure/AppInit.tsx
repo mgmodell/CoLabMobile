@@ -3,7 +3,7 @@ import { useDispatch } from 'react-redux';
 import {getContext, setInitialised} from './ContextSlice';
 import {cleanUpMsgs} from './StatusSlice';
 import { useTypedSelector } from "./AppReducers";
-import {Text} from 'react-native';
+import Skeleton from "../util/Skeleton";
 
 import PropTypes from "prop-types";
 
@@ -33,7 +33,7 @@ export default function AppInit(props: Props ) {
 
 
   if( !initialised || undefined === props.children ){
-    return <Text>suspenseful</Text>;
+    return <Skeleton height={300} />
   }else{
     return props.children;
 

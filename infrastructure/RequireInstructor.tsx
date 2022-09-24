@@ -1,6 +1,7 @@
 import React from 'react';
-import { Navigate, useLocation } from 'react-router-dom';
+import { Navigate, useLocation } from 'react-router-native';
 import { useTypedSelector } from './AppReducers';
+import Skeleton from '../util/Skeleton';
 
 export default function RequireInstructor({ children }) {
   const isLoggedIn = useTypedSelector( (state)=>state.context.status.loggedIn );
@@ -14,7 +15,7 @@ export default function RequireInstructor({ children }) {
     return children;
 
   } else if( isLoggingIn ) {
-    return <h1>Suspenseful</h1>;
+    return <Skeleton height={300} />
 
   } else {
     return <Navigate to='/'

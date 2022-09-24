@@ -122,7 +122,7 @@ const CONFIG = {
         return axios.get( endPointsUrl + '.json',
             { withCredentials: true } )
             .then( resp =>{
-                console.log( 'resp', resp )
+                console.log( 'retrieved', resp );
                 if( resp['data'][ 'logged_in'] ){
                     dispatch( setLoggedIn(
                         resp['data']['lookups'],
@@ -130,9 +130,9 @@ const CONFIG = {
                     dispatch( setProfile( resp['data']['profile']['user']) )
                     //dispatch( fetchProfile( ) );
                 } else {
-                    dispatch( setLoggedOut(
-                        resp['data']['lookups'],
-                        resp['data']['endpoints'] ) );
+                    dispatch( setLoggedOut( ) );
+                    dispatch( setLookups( resp['data']['lookups'] ) );
+                    dispatch( setEndPoints( resp['data']['endpoints'] ) );
                     dispatch( clearProfile );
                     CONFIG.deleteData( CONFIG.SAVED_CREDS_KEY );
                 }
@@ -255,6 +255,7 @@ const contextSlice = createSlice({
                 state.status.lookupsLoaded = true;
             },
             prepare: (lookups: object, endpoints: object ) =>{
+                console.log( 'in logged in')
                 return{
                     payload:{
                         lookups: lookups,
@@ -286,6 +287,7 @@ const contextSlice = createSlice({
         },
         setLookups: {
             reducer: (state, action) => {
+                console.log( 'lookups', action.payload );
                 state.lookups = action.payload;
                 state.status.lookupsLoaded = true;
             }
@@ -299,17 +301,22 @@ export const getContext = createAsyncThunk(
         const dispatch = thunkAPI.dispatch;
         const getState = thunkAPI.getState;
 
+        var counter = 0;
+        console.log( 'gc', ++counter );
         dispatch( setEndPointUrl( endPointsUrl ) );
 
+        console.log( 'gc', ++counter );
         dispatch( setLoggingIn( {} ) );
         axios.interceptors.request.use( CONFIG.appendAuthHeaders );
         axios.interceptors.response.use( CONFIG.storeRetrievedCredentials );
+        console.log( 'gc', ++counter );
 
         //Add ProcessLocationBar later
         
         //Pull the resources
         CONFIG.retrieveResources( dispatch, getState )
             .then( () =>{
+        console.log( 'gc', ++counter );
                 dispatch( setInitialised( {} ) );
             });
     }
