@@ -91,7 +91,7 @@ export default function Logo(props) {
         cx="485"
         cy="493"
         r="490"
-        fill="url('#bg_grad')"
+        fill="url(#bg_grad)"
       />
       <G id="circles" stroke="black" strokeWidth="30">
         <Line x1={center.x} y1={center.y} x2={points[0].x} y2={points[0].y} />

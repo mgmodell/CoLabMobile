@@ -26,12 +26,10 @@ import {
 } from 'react-native/Libraries/NewAppScreen';
 
 import { Provider } from "react-redux";
-import { 
-  NativeRouter as Router,
-  Routes,
-  Route,
-  useParams
- } from "react-router-native";
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+
+
  import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 
@@ -41,35 +39,12 @@ import AppInit from './infrastructure/AppInit';
 import RequireAuth from "./infrastructure/RequireAuth";
 import RequireInstructor from "./infrastructure/RequireInstructor";
 import AppHeader from './AppHeader';
+import SplashLoading from './SplashLoading';
 import SignIn from './SignIn';
 import Skeleton from './util/Skeleton';
 
-const Section = ({children, title}): Node => {
-  const isDarkMode = useColorScheme() === 'dark';
+const Stack = createNativeStackNavigator();
 
-  return (
-    <View style={styles.sectionContainer}>
-      <Text
-        style={[
-          styles.sectionTitle,
-          {
-            color: isDarkMode ? Colors.white : Colors.black,
-          },
-        ]}>
-        {title}
-      </Text>
-      <Text
-        style={[
-          styles.sectionDescription,
-          {
-            color: isDarkMode ? Colors.light : Colors.dark,
-          },
-        ]}>
-        {children}
-      </Text>
-    </View>
-  );
-};
 
 const App: () => Node = () => {
   const isDarkMode = useColorScheme() === 'dark';
@@ -89,44 +64,13 @@ const App: () => Node = () => {
     <SafeAreaProvider>
 
     <Provider store={store}>
-      <AppHeader />
       <AppInit endpointsUrl={getEndpointsUrl}>
-    <SafeAreaView style={backgroundStyle}>
-      <AppHeader />
-      <ScrollView
-        contentInsetAdjustmentBehavior="automatic"
-        style={backgroundStyle}>
-        <View
-          style={{
-            backgroundColor: isDarkMode ? Colors.black : Colors.white,
-          }}>
-        </View>
-        <Router>
-          <Routes>
+    <NavigationContainer>
+      <Stack.Navigator>
+        <Stack.Screen name="Home" component={SplashLoading} />
+      </Stack.Navigator>
+    </NavigationContainer>
 
-          <Route
-                    path="/"
-                    element={
-                      <RequireAuth>
-                        <h1>Dennis will build this</h1>
-                      </RequireAuth>
-                    }
-                  />
-          <Route path="login"
-          element={
-            <Suspense fallback={<Skeleton /> } >
-              <SignIn />
-            </Suspense>
-            /*
-            startTransition(()=>{
-              return(<SignIn />)
-            })
-            */
-          } />
-          </Routes>
-        </Router>
-      </ScrollView>
-    </SafeAreaView>
  </AppInit>
  </Provider>
     </SafeAreaProvider>
