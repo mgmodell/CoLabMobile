@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Navigate, useNavigate, useLocation } from "react-router-native";
+
 //Redux store stuff
 import { useDispatch } from "react-redux";
 import { Priorities, addMessage } from "./infrastructure/StatusSlice";
@@ -7,13 +7,16 @@ import EmailValidator from "email-validator";
 import { useTranslation } from "react-i18next";
 
 import {
+  View,
+} from 'react-native';
+import {
   Button,
   Input as TextField,
-  Overlay,
   Tab,
   Text,
 
 } from '@rneui/themed';
+import { TabView } from "@rneui/base";
 
 import {
   emailSignIn,
@@ -24,15 +27,12 @@ import {
 import { GoogleLogin } from "react-google-login";
 import { useTypedSelector } from "./infrastructure/AppReducers";
 import axios from "axios";
-import { TabView } from "@rneui/base";
 
 export default function SignIn(props) {
   const category = "devise";
   const { t }: { t: any } = useTranslation(category);
 
   const dispatch = useDispatch();
-  const { state } = useLocation();
-  const navigate = useNavigate();
 
   const [email, setEmail] = useState("");
   const [firstName, setFirstName] = useState("");
@@ -57,12 +57,11 @@ export default function SignIn(props) {
   //It gets placed on the password field
   const submitOnEnter = evt => {
     if (endpointsLoaded && evt.key === "Enter") {
-      dispatch(emailSignIn({email, password})).then(navigate(from));
+      dispatch(emailSignIn({email, password}));
       evt.preventDefault();
     }
   };
 
-  const from = undefined != state ? state.from : "/";
 
   const enterLoginBtn = (
     <Button
@@ -73,7 +72,7 @@ export default function SignIn(props) {
         !EmailValidator.validate(email)
       }
       onPress={() => {
-        dispatch(emailSignIn({email, password})).then(navigate(from));
+        dispatch(emailSignIn({email, password}));
       }}
     >
       {t("sessions.login_submit")}
@@ -98,9 +97,7 @@ export default function SignIn(props) {
         <Button
           disabled={"" === email || !endpointsLoaded}
           onPress={() => {
-            dispatch(emailSignUp({email: string, firstName: string, lastName: string})).then(
-              navigate(from)
-            );
+            dispatch(emailSignUp({email: string, firstName: string, lastName: string}));
           }}
         >
           {t("registrations.signup_btn")}
@@ -177,21 +174,24 @@ export default function SignIn(props) {
   );
 
   console.log( 'sign in widget', loggingIn, isLoggedIn );
-  if (isLoggedIn) {
-    return <Navigate replace to={state.from || "/"} />;
-  } else {
     return (
-      <React.Fragment>
-        <Overlay isVisible={loggingIn} >
-          <Text>Loading...</Text>
-        </Overlay>
+      <View style={{ flex: 1, alignItems: 'stretch', justifyContent: 'flex-start' }}>
+        <Text>Hi</Text>
+        {emailField}
         <Tab onChange={setCurTab} value={curTab}>
-            <Tab label={t("sessions.login")} />
-            <Tab label={t("registrations.signup_tab")} />
-            <Tab label={t("passwords.reset_tab")} />
+            <Tab.Item
+              title={t("sessions.login")}
+              titleStyle={{ fontSize: 12 }}
+            />
+            <Tab.Item
+              title={t("registrations.signup_tab")}
+              titleStyle={{ fontSize: 12 }}
+              />
+            <Tab.Item title={t("passwords.reset_tab")} />
         </Tab>
         <TabView value={curTab} onChange={setCurTab} animationType='spring'>
           <TabView.Item >
+            <Text>I love you</Text>
               {emailField}
                 <TextField
                   label="Password"
@@ -206,12 +206,14 @@ export default function SignIn(props) {
             {oauthBtn}
           </TabView.Item>
           <TabView.Item>
+            <Text>I hate you</Text>
               {emailField}
               {registerBlock}
               {clearBtn}
 
           </TabView.Item>
           <TabView.Item>
+            <Text>I medium you</Text>
               {emailField}
               {passwordResetBtn}
               {clearBtn}
@@ -219,8 +221,9 @@ export default function SignIn(props) {
           </TabView.Item>
 
         </TabView>
-      </React.Fragment>
-    );
-  }
+      </View>
+    )
 }
+    
+    
 SignIn.propTypes = {};

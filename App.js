@@ -36,12 +36,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { configureStore } from "@reduxjs/toolkit";
 import appStatus from "./infrastructure/AppReducers";
 import AppInit from './infrastructure/AppInit';
-import RequireAuth from "./infrastructure/RequireAuth";
-import RequireInstructor from "./infrastructure/RequireInstructor";
-import AppHeader from './AppHeader';
-import SplashLoading from './SplashLoading';
-import SignIn from './SignIn';
-import Skeleton from './util/Skeleton';
+import NavShell from './NavShell';
 
 const Stack = createNativeStackNavigator();
 
@@ -63,16 +58,11 @@ const App: () => Node = () => {
   return (
     <SafeAreaProvider>
 
-    <Provider store={store}>
-      <AppInit endpointsUrl={getEndpointsUrl}>
-    <NavigationContainer>
-      <Stack.Navigator>
-        <Stack.Screen name="Home" component={SplashLoading} />
-      </Stack.Navigator>
-    </NavigationContainer>
-
- </AppInit>
- </Provider>
+      <Provider store={store}>
+        <AppInit endpointsUrl={getEndpointsUrl}>
+          <NavShell />
+        </AppInit>
+      </Provider>
     </SafeAreaProvider>
   );
 };

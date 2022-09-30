@@ -122,7 +122,6 @@ const CONFIG = {
         return axios.get( endPointsUrl + '.json',
             { withCredentials: true } )
             .then( resp =>{
-                console.log( 'retrieved', resp );
                 if( resp['data'][ 'logged_in'] ){
                     dispatch( setLoggedIn(
                         resp['data']['lookups'],
@@ -255,7 +254,6 @@ const contextSlice = createSlice({
                 state.status.lookupsLoaded = true;
             },
             prepare: (lookups: object, endpoints: object ) =>{
-                console.log( 'in logged in')
                 return{
                     payload:{
                         lookups: lookups,
@@ -287,7 +285,6 @@ const contextSlice = createSlice({
         },
         setLookups: {
             reducer: (state, action) => {
-                console.log( 'lookups', action.payload );
                 state.lookups = action.payload;
                 state.status.lookupsLoaded = true;
             }
@@ -302,21 +299,17 @@ export const getContext = createAsyncThunk(
         const getState = thunkAPI.getState;
 
         var counter = 0;
-        console.log( 'gc', ++counter );
         dispatch( setEndPointUrl( endPointsUrl ) );
 
-        console.log( 'gc', ++counter );
         dispatch( setLoggingIn( {} ) );
         axios.interceptors.request.use( CONFIG.appendAuthHeaders );
         axios.interceptors.response.use( CONFIG.storeRetrievedCredentials );
-        console.log( 'gc', ++counter );
 
         //Add ProcessLocationBar later
         
         //Pull the resources
         CONFIG.retrieveResources( dispatch, getState )
             .then( () =>{
-        console.log( 'gc', ++counter );
                 dispatch( setInitialised( {} ) );
             });
     }
