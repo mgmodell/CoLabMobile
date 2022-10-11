@@ -3,7 +3,25 @@ import PropTypes from "prop-types";
 
 import Svg, { Line, Stop, LinearGradient, Circle, G } from 'react-native-svg';
 
+
+  if (global.__fbBatchedBridge) {
+    console.log( 'stinky' );
+    const origMessageQueue = global.__fbBatchedBridge;
+    const modules = origMessageQueue._remoteModuleTable;
+    const methods = origMessageQueue._remoteMethodTable;
+    global.findModuleByModuleAndMethodIds = (moduleId, methodId) => {
+      console.log(`The problematic line code is in: ${moduleId}:${modules[moduleId]}.${methodId}:${methods[moduleId][methodId]}`)
+    }
+    global.findModuleByModuleAndMethodIds(47,17);
+    global.findModuleByModuleAndMethodIds(70,1);
+    global.findModuleByModuleAndMethodIds(70,0);
+    global.findModuleByModuleAndMethodIds(47,6);
+
+  }
+  console.log( 'I hate you' );
+
 export default function Logo(props) {
+
   const height = props.height || 72;
   const width = props.width || 72;
   const mounted = useRef(false);
@@ -70,13 +88,13 @@ export default function Logo(props) {
     <Svg
       height={height}
       width={width}
-      onPress={spinIt}
+      //onPress={spinIt}
       viewBox={viewBox}
       preserveAspectRatio="xMidYMid meet"
       //xmlns="http://www.w3.org/2000/svg"
     >
       <LinearGradient
-        id="bg_grad"
+        id="backdrop"
         x1="-5"
         y1="493"
         x2="975"
@@ -91,7 +109,7 @@ export default function Logo(props) {
         cx="485"
         cy="493"
         r="490"
-        fill="url(#bg_grad)"
+        fill="url(#backdrop)"
       />
       <G id="circles" stroke="black" strokeWidth="30">
         <Line x1={center.x} y1={center.y} x2={points[0].x} y2={points[0].y} />

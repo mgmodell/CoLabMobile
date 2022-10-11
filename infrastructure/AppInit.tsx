@@ -3,7 +3,7 @@ import { useDispatch } from 'react-redux';
 import {getContext, setInitialised} from './ContextSlice';
 import {cleanUpMsgs} from './StatusSlice';
 import { useTypedSelector } from "./AppReducers";
-import Skeleton from "../util/Skeleton";
+import SplashLoading from "../SplashLoading";
 
 import PropTypes from "prop-types";
 
@@ -33,7 +33,7 @@ export default function AppInit(props: Props ) {
 
 
   if( !initialised || undefined === props.children ){
-    return <Skeleton height={300} />
+    return <SplashLoading />
   }else{
     return props.children;
 

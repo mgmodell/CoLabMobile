@@ -32,7 +32,7 @@ export default function NavShell(props) {
           <Stack.Screen name="Home" component={SplashLoading} />
 
         ) : (
-          <Stack.Screen name="Home" component={SignIn} />
+          <Stack.Screen name="Log In" component={SignIn} />
 
         )
 

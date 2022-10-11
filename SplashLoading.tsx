@@ -30,7 +30,13 @@ export default function SplashLoading(props) {
     <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
           <Logo />
           <Text>CoLab</Text>
-          <Quote url={`http://localhost:3000/${endpoints.quotePath}`} />
+          {
+            endpointsLoaded && endpoints != undefined ? (
+              <Quote url={`http://localhost:3000/${endpoints.quotePath}`} />
+            ) : (
+              null
+            )
+          }
     </View>
     /*
     <Header

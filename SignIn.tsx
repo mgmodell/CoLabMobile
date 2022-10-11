@@ -7,6 +7,7 @@ import EmailValidator from "email-validator";
 import { useTranslation } from "react-i18next";
 
 import {
+  SafeAreaView,
   View,
 } from 'react-native';
 import {
@@ -147,6 +148,11 @@ export default function SignIn(props) {
   };
 
   const oauthBtn = (
+    <View>
+
+      <Text>Something</Text>
+    </View>
+    /*
     <GoogleLogin
       clientId={oauth_client_ids["google"]}
       onSuccess={get_token_from_oauth}
@@ -155,6 +161,7 @@ export default function SignIn(props) {
       }}
       cookiePolicy="single_host_origin"
     />
+    */
   );
 
   const emailField = (
@@ -175,6 +182,17 @@ export default function SignIn(props) {
 
   console.log( 'sign in widget', loggingIn, isLoggedIn );
     return (
+
+      <View>
+      <Button>I love peas</Button>
+
+      </View>
+
+    )
+    const X = (
+      <SafeAreaView >
+
+
       <View style={{ flex: 1, alignItems: 'stretch', justifyContent: 'flex-start' }}>
         <Text>Hi</Text>
         {emailField}
@@ -191,6 +209,8 @@ export default function SignIn(props) {
         </Tab>
         <TabView value={curTab} onChange={setCurTab} animationType='spring'>
           <TabView.Item >
+            <View>
+
             <Text>I love you</Text>
               {emailField}
                 <TextField
@@ -204,24 +224,31 @@ export default function SignIn(props) {
             {enterLoginBtn}
             {clearBtn}
             {oauthBtn}
+            </View>
           </TabView.Item>
           <TabView.Item>
+            <View>
+
             <Text>I hate you</Text>
               {emailField}
               {registerBlock}
               {clearBtn}
-
+            </View>
           </TabView.Item>
           <TabView.Item>
+            <View>
+
             <Text>I medium you</Text>
               {emailField}
               {passwordResetBtn}
               {clearBtn}
 
+            </View>
           </TabView.Item>
 
         </TabView>
       </View>
+      </SafeAreaView>
     )
 }
     
