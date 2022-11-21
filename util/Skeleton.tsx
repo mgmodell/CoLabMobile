@@ -2,12 +2,12 @@ import React, { useState } from "react";
 import PropTypes from 'prop-types';
 
 import {
-  Skeleton as SkRNEUI,
- } from '@rneui/themed';
+  ActivityIndicator
+ } from 'react-native-paper';
 
 export default function Skeleton(props) {
   return(
-    <SkRNEUI width={props.width} height={props.height} animation='wave' />
+    <ActivityIndicator width={props.width} height={props.height} animating={true} />
   )
 }
 Skeleton.propTypes = {

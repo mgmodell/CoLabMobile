@@ -12,12 +12,9 @@ import {
 } from 'react-native';
 import {
   Button,
-  Input as TextField,
-  Tab,
+  TextInput as TextField,
   Text,
-
-} from '@rneui/themed';
-import { TabView } from "@rneui/base";
+} from 'react-native-paper';
 
 import {
   emailSignIn,
@@ -169,8 +166,9 @@ export default function SignIn(props) {
         label={t("email_fld")}
         id="email"
         autoFocus
+        autoCapitalize={false}
         value={email}
-        onChange={event => setEmail(event.target.value)}
+        onChangeText={value => setEmail(value)}
         error={"" !== email && !EmailValidator.validate(email)}
         helperText={
           "" === email || EmailValidator.validate(email)
@@ -180,11 +178,21 @@ export default function SignIn(props) {
       />
   );
 
-  console.log( 'sign in widget', loggingIn, isLoggedIn );
     return (
-
       <View>
-      <Button>I love peas</Button>
+              {emailField}
+                <TextField
+                  label="Password"
+                  id="password"
+                  secureTextEntry={true}
+                  value={password}
+                  variant="standard"
+                  onChangeText={value => setPassword(value)}
+                  onKeyDown={submitOnEnter}
+                />
+            {enterLoginBtn}
+            {clearBtn}
+            {oauthBtn}
 
       </View>
 

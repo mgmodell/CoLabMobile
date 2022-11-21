@@ -117,6 +117,7 @@ const profileSlice = createSlice({
   }
 })
 
+const host_url = 'http://localhost:3000';
 
 //Middleware async functions
 export const setLocalLanguage = createAsyncThunk( 
@@ -143,7 +144,7 @@ export const fetchProfile = createAsyncThunk(
     const dispatch = thunkAPI.dispatch;
     const getState = thunkAPI.getState;
 
-    const url = getState()['context']['endpoints'][ 'profile' ]['baseUrl'] + '.json';
+    const url = host_url + getState()['context']['endpoints'][ 'profile' ]['baseUrl'] + '.json';
     dispatch( startTask( 'init' ) )
 
     axios.get( url, {
@@ -164,7 +165,7 @@ export const persistProfile = createAsyncThunk(
   'profile/persistProfile',
   async( thunkAPI ) => {
     dispatch( startTask( 'saving' ) );
-    const url = getState().context.endpoints[ 'profile' ]['baseUrl'] + '.json';
+    const url = host_url + getState().context.endpoints[ 'profile' ]['baseUrl'] + '.json';
     let user: ProfilesRootState = getState().profile.user;
 
 

@@ -2,12 +2,7 @@ import React from "react";
 import { useDispatch } from "react-redux";
 import { useTypedSelector } from "./infrastructure/AppReducers";
 
-import { View } from "react-native";
-import {
-  Card,
-  Icon,
-  Text,
-} from '@rneui/themed';
+import { Banner } from 'react-native-paper';
 
 import { acknowledgeMsg } from "./infrastructure/StatusSlice";
 import WorkingIndicator from "./infrastructure/WorkingIndicator";
@@ -24,17 +19,19 @@ export default function AppStatusBar(props) {
     <React.Fragment>
       {messages.map((message, index) => {
         return !message['dismissed'] && (
-          <Card key={`collapse_${index}`} >
-            <Card.FeaturedTitle>Severity: ${message.priority}</Card.FeaturedTitle>
-            <Card.Divider />
-            <Card.FeaturedSubtitle>${message['text']}</Card.FeaturedSubtitle>
-            <Icon name='close'
-              type='fontawesome'
-              onPress={ () =>{
-                    dispatch(acknowledgeMsg(index));
+          <Banner visible={true}
+            actions={[
+              {
+                label: 'Dismiss',
+                onPress: () => {
+                  dispatch( acknowledgeMsg( index ) );
+                }
               }
-            } />
-          </Card>
+            ]}
+            >/
+              Severity: ${message.priority}
+              ${message['text']}
+            </Banner>
         );
       })}
       <WorkingIndicator />

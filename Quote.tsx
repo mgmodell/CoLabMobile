@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import axios from "axios";
 import {
   Text,
-} from '@rneui/themed';
+} from 'react-native-paper';
 
 export default function Quote(props) {
   const [quote, setQuote] = useState({ text: "", attribution: "" });
@@ -22,7 +22,7 @@ export default function Quote(props) {
   useEffect(() => updateQuote(), []);
 
   return (
-    <Text onPress={() => {return updateQuote() }} className="quotes">
+    <Text variant='bodySmall' onPress={() => {return updateQuote() }} className="quotes">
       {quote.text} ({quote.attribution})
     </Text>
   );

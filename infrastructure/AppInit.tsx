@@ -32,12 +32,15 @@ export default function AppInit(props: Props ) {
   }, [] )
 
 
+  return props.children;
+  /*
   if( !initialised || undefined === props.children ){
-    return <SplashLoading />
+    return (<SplashLoading />);
   }else{
     return props.children;
 
   }
+  */
 }
 
 AppInit.propTypes = {

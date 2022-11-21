@@ -15,7 +15,7 @@ i18n
   .use(intervalPlural)
   .init({
     backend: {
-      loadPath: "/infra/locales/{{ns}}.json",
+      loadPath: "http://localhost:3000/infra/locales/{{ns}}.json",
       // path to post missing resources
       addPath: "locales/add/{{ns}}",
       // define how to stringify the data when adding missing resources

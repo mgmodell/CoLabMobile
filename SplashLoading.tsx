@@ -6,9 +6,8 @@ import {
 } from 'react-native';
 
 import {
-  Header,
   Text,
-} from "@rneui/themed";
+} from 'react-native-paper';
 
 import Logo from "./Logo";
 import Quote from "./Quote";
@@ -26,17 +25,11 @@ export default function SplashLoading(props) {
     state => state.context.status.endpointsLoaded
   );
 
+  console.log( 'epv', endpointsLoaded, endpoints );
   return (
     <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
           <Logo />
-          <Text>CoLab</Text>
-          {
-            endpointsLoaded && endpoints != undefined ? (
-              <Quote url={`http://localhost:3000/${endpoints.quotePath}`} />
-            ) : (
-              null
-            )
-          }
+          <Text variant='bodyLarge'>CoLab</Text>
     </View>
     /*
     <Header

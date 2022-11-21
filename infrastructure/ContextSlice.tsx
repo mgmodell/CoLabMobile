@@ -91,8 +91,9 @@ const CONFIG = {
     },
 
     //Layer of indirection to support AsyncStorage - probably unnecessary
-    retrieveData( key ){
-        const val = getData( key );
+    async retrieveData( key ){
+        const val = await getData( key );
+        console.log( key, "val", val );
 
         // if value is a simple string, the parser will fail. in that case, simply
         // unescape the quotes and return the string.
@@ -108,7 +109,8 @@ const CONFIG = {
 
     persistData: function( key : string, val ){
         let data = JSON.stringify( val );
-        storeData( key, val );
+        console.log( 'storing', key );
+        storeData( key, data );
 
     },
 
@@ -337,7 +339,7 @@ export const emailSignIn = createAsyncThunk(
         if( !params.email || !params.password ){
             dispatch( setLoginFailed( ) );
         } else {
-            return axios.post( CONFIG.EMAIL_SIGNIN_PATH,
+            return axios.post( `http://localhost:3000/${CONFIG.EMAIL_SIGNIN_PATH}`,
                 { email: params.email,
                   password: params.password } )
                 .then( resp=>{

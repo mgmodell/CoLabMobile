@@ -6,14 +6,12 @@ import {
 } from 'react-native';
 
 import {
-  Button,
   Dialog,
   Divider,
-  Icon,
   Input,
-  ListItem,
-  Text
-} from '@rneui/themed';
+  List,
+  TextInput
+} from 'react-native-paper';
 
 import { useTranslation } from "react-i18next";
 
@@ -64,37 +62,37 @@ export default function DiversityCheck (props){
 
     return (
       <Suspense fallback={<div>Loading...</div>}>
-        <ListItem onPress={openDialog} >
-          <ListItem.Content>
-            <Icon name='compare' type="MaterialCommunityIcons" />
-            <ListItem.Title>
-              {t('calc_diversity')}
-            </ListItem.Title>
-          </ListItem.Content>
-        </ListItem>
+        <List.Item onPress={openDialog} />
+          <List.Item
+              title={t('calc_diversity')}
+              left={props => <List.Icon {...props} icon='compare' />}
+
+          />
         <Dialog isVisible={dialogOpen}
                 aria-labelledby={t("calc_it")} >
 
                 <Dialog.Title>{t("calc_it")}</Dialog.Title>
-                <Text>{t('ds_emails_lbl')}</Text>
+                <Dialog.Content>
+                  <Text>{t('ds_emails_lbl')}</Text>
+                </Dialog.Content>
                 <Input value={emails} onChange={handleChange} />
                 <Dialog.Actions>
-                    <Dialog.Button
+                    <Button
                       variant="contained"
                       onClick={calcDiversity}
                     >
                       {t("calc_diversity_sub")}
-                    </Dialog.Button>
-                    <Dialog.Button
+                    </Button>
+                    <Button
                       variant="contained"
                       onClick={handleClear}
                     >
                       {t('clear')}
-                    </Dialog.Button>
+                    </Button>
                 </Dialog.Actions>
-          <Text>{diversityScore}</Text>
-          <Divider/>
-          <FlatList data={foundUsers}
+            <Text>{diversityScore}</Text>
+            <Divider/>
+            <FlatList data={foundUsers}
                     renderItem={(user)=>{
                       return(
                         <Text onPress={(user)=>{
