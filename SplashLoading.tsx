@@ -25,7 +25,6 @@ export default function SplashLoading(props) {
     state => state.context.status.endpointsLoaded
   );
 
-  console.log( 'epv', endpointsLoaded, endpoints );
   return (
     <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
           <Logo />

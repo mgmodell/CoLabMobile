@@ -54,6 +54,7 @@ export default function SignIn(props) {
   //Code to trap an 'enter' press and submit
   //It gets placed on the password field
   const submitOnEnter = evt => {
+    console.log( 'pressed', evt.key );
     if (endpointsLoaded && evt.key === "Enter") {
       dispatch(emailSignIn({email, password}));
       evt.preventDefault();
@@ -70,6 +71,8 @@ export default function SignIn(props) {
         !EmailValidator.validate(email)
       }
       onPress={() => {
+        console.log( 'login button' );
+
         dispatch(emailSignIn({email, password}));
       }}
     >
@@ -147,7 +150,7 @@ export default function SignIn(props) {
   const oauthBtn = (
     <View>
 
-      <Text>Something</Text>
+      <Text>Oauth button later</Text>
     </View>
     /*
     <GoogleLogin
@@ -219,7 +222,6 @@ export default function SignIn(props) {
           <TabView.Item >
             <View>
 
-            <Text>I love you</Text>
               {emailField}
                 <TextField
                   label="Password"
@@ -237,7 +239,6 @@ export default function SignIn(props) {
           <TabView.Item>
             <View>
 
-            <Text>I hate you</Text>
               {emailField}
               {registerBlock}
               {clearBtn}
@@ -246,7 +247,6 @@ export default function SignIn(props) {
           <TabView.Item>
             <View>
 
-            <Text>I medium you</Text>
               {emailField}
               {passwordResetBtn}
               {clearBtn}

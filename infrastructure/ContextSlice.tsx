@@ -10,6 +10,7 @@ import i18n from './i18n';
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
+const hostUrl = 'http://localhost:3000';
 
 const category = 'devise';
 const t = i18n.getFixedT( null, category );
@@ -64,17 +65,19 @@ const CONFIG = {
      */
     storeRetrievedCredentials: function( response: any ){
 
-
         if( CONFIG.isApiRequest( response['config']['url'] ) ){
             let newHeaders = {};
             let blankHeaders = true;
 
+            console.log( 'response', response );
             for( var key in CONFIG.tokenFormat){
                 newHeaders[ key ] = response['headers'][key];
-                if( newHeaders[key]){
+                if( undefined !== newHeaders[key]){
                     blankHeaders = false;
                 }
             }
+
+            console.log( 'blank', blankHeaders, 'new headers:', newHeaders );
 
             if( !blankHeaders ) {
                 CONFIG.persistData( CONFIG.SAVED_CREDS_KEY, newHeaders );
@@ -93,7 +96,6 @@ const CONFIG = {
     //Layer of indirection to support AsyncStorage - probably unnecessary
     async retrieveData( key ){
         const val = await getData( key );
-        console.log( key, "val", val );
 
         // if value is a simple string, the parser will fail. in that case, simply
         // unescape the quotes and return the string.
@@ -109,7 +111,6 @@ const CONFIG = {
 
     persistData: function( key : string, val ){
         let data = JSON.stringify( val );
-        console.log( 'storing', key );
         storeData( key, data );
 
     },
@@ -118,12 +119,16 @@ const CONFIG = {
         removeData( key );
     },
 
+
     retrieveResources: function( dispatch: Function, getState: Function ){
         const endPointsUrl = getState()['context']['config']['endpoint_url'];
+
+        console.log( 'epURL:', endPointsUrl );
 
         return axios.get( endPointsUrl + '.json',
             { withCredentials: true } )
             .then( resp =>{
+                console.log( 'logged_in?', resp.data );
                 if( resp['data'][ 'logged_in'] ){
                     dispatch( setLoggedIn(
                         resp['data']['lookups'],
@@ -135,9 +140,13 @@ const CONFIG = {
                     dispatch( setLookups( resp['data']['lookups'] ) );
                     dispatch( setEndPoints( resp['data']['endpoints'] ) );
                     dispatch( clearProfile );
+                    console.log( 'login failed' );
                     CONFIG.deleteData( CONFIG.SAVED_CREDS_KEY );
                 }
 
+            })
+            .catch( (e) =>{
+                console.log( e );
             })
 
     },
@@ -148,6 +157,8 @@ const CONFIG = {
 const storeData = async (key: string, value: string) => {
     try {
       await AsyncStorage.setItem(key, value);
+      // console.log( 'data saved!' );
+      
     } catch (e) {
       // saving error
         console.log( 'error saving', e );
@@ -157,6 +168,7 @@ const storeData = async (key: string, value: string) => {
 const getData = async (key: string) => {
     try {
       const value = await AsyncStorage.getItem(key);
+      // console.log( 'fromAS', value)
       if(value !== null) {
         return value;
         // value previously stored
@@ -169,6 +181,7 @@ const getData = async (key: string) => {
 
 const removeData = async (key: string) =>{
     try {
+        console.log( 'remove', key );
         await AsyncStorage.removeItem( key );
     } catch(e) {
         // remove error
@@ -339,10 +352,12 @@ export const emailSignIn = createAsyncThunk(
         if( !params.email || !params.password ){
             dispatch( setLoginFailed( ) );
         } else {
-            return axios.post( `http://localhost:3000/${CONFIG.EMAIL_SIGNIN_PATH}`,
+            console.log( 'logging in now' );
+            return axios.post( `http://localhost:3000${CONFIG.EMAIL_SIGNIN_PATH}.json`,
                 { email: params.email,
                   password: params.password } )
                 .then( resp=>{
+                    console.log( 'resp', resp );
                     //TODO resp contains the full user info
 
                     dispatch( addMessage( t( 'sessions.signed_in'), new Date(), Priorities.INFO ))
@@ -433,6 +448,7 @@ export const signOut = createAsyncThunk(
             .then( resp=>{
                 dispatch( clearProfile() );
                 dispatch( setLoggedOut( ) );
+                console.log( 'logging out' );
                 CONFIG.deleteData( CONFIG.SAVED_CREDS_KEY );
                 CONFIG.retrieveResources( dispatch, getState )
                     .then( () =>{
