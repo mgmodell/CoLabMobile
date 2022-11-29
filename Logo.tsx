@@ -5,7 +5,6 @@ import Svg, { Line, Stop, LinearGradient, Circle, G } from 'react-native-svg';
 
 
   if (global.__fbBatchedBridge) {
-    console.log( 'stinky' );
     const origMessageQueue = global.__fbBatchedBridge;
     const modules = origMessageQueue._remoteModuleTable;
     const methods = origMessageQueue._remoteMethodTable;
@@ -18,7 +17,6 @@ import Svg, { Line, Stop, LinearGradient, Circle, G } from 'react-native-svg';
     global.findModuleByModuleAndMethodIds(47,6);
 
   }
-  console.log( 'I hate you' );
 
 export default function Logo(props) {
 

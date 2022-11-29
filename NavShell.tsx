@@ -1,6 +1,8 @@
 import React, { useState, useEffect, Suspense } from "react";
 import PropTypes from "prop-types";
 
+import { Text } from "react-native-paper";
+
 import SplashLoading from "./SplashLoading";
 import SignIn from "./SignIn";
 
@@ -23,20 +25,33 @@ export default function NavShell(props) {
     state => state.context.status.endpointsLoaded
   );
 
-  console.log( 'logging in:', loggingIn );
+
+  let mainStack = (<Stack.Screen name='Splash' component={SplashLoading}/>);
+
+  // Dennis, replace this with your component
+  const LoggedInMessage = ()=>{
+    return(
+
+      <Text variant='displayLarge'>I love you!</Text>
+    );
+  }
+
+
+  if( isLoggedIn ){
+
+    mainStack = (<Stack.Screen name='Log In' component={LoggedInMessage} />);
+
+
+  } else if( !loggingIn ){
+    mainStack = (<Stack.Screen name='Log In' component={SignIn} />);
+
+  };
+
+
   return (
     <NavigationContainer>
       <Stack.Navigator>
-      {
-        loggingIn ? (
-          <Stack.Screen name="Home" component={SplashLoading} />
-
-        ) : (
-          <Stack.Screen name="Log In" component={SignIn} />
-
-        )
-
-      }
+        { mainStack }
       </Stack.Navigator>
     </NavigationContainer>
   );

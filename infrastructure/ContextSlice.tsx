@@ -41,8 +41,8 @@ const CONFIG = {
      * @param config what has already been configured to be sent.
      * @returns 
      */
-    appendAuthHeaders: function( config: any ){
-        const storedHeaders = CONFIG.retrieveData( CONFIG.SAVED_CREDS_KEY );
+    appendAuthHeaders: async function( config: any ){
+        const storedHeaders = await CONFIG.retrieveData( CONFIG.SAVED_CREDS_KEY );
 
         if ( CONFIG.isApiRequest(config.url) && storedHeaders) {
             // bust IE cache
@@ -69,7 +69,6 @@ const CONFIG = {
             let newHeaders = {};
             let blankHeaders = true;
 
-            console.log( 'response', response );
             for( var key in CONFIG.tokenFormat){
                 newHeaders[ key ] = response['headers'][key];
                 if( undefined !== newHeaders[key]){
@@ -77,7 +76,6 @@ const CONFIG = {
                 }
             }
 
-            console.log( 'blank', blankHeaders, 'new headers:', newHeaders );
 
             if( !blankHeaders ) {
                 CONFIG.persistData( CONFIG.SAVED_CREDS_KEY, newHeaders );
@@ -123,12 +121,10 @@ const CONFIG = {
     retrieveResources: function( dispatch: Function, getState: Function ){
         const endPointsUrl = getState()['context']['config']['endpoint_url'];
 
-        console.log( 'epURL:', endPointsUrl );
 
         return axios.get( endPointsUrl + '.json',
             { withCredentials: true } )
             .then( resp =>{
-                console.log( 'logged_in?', resp.data );
                 if( resp['data'][ 'logged_in'] ){
                     dispatch( setLoggedIn(
                         resp['data']['lookups'],
@@ -140,7 +136,6 @@ const CONFIG = {
                     dispatch( setLookups( resp['data']['lookups'] ) );
                     dispatch( setEndPoints( resp['data']['endpoints'] ) );
                     dispatch( clearProfile );
-                    console.log( 'login failed' );
                     CONFIG.deleteData( CONFIG.SAVED_CREDS_KEY );
                 }
 
@@ -157,7 +152,6 @@ const CONFIG = {
 const storeData = async (key: string, value: string) => {
     try {
       await AsyncStorage.setItem(key, value);
-      // console.log( 'data saved!' );
       
     } catch (e) {
       // saving error
@@ -168,7 +162,6 @@ const storeData = async (key: string, value: string) => {
 const getData = async (key: string) => {
     try {
       const value = await AsyncStorage.getItem(key);
-      // console.log( 'fromAS', value)
       if(value !== null) {
         return value;
         // value previously stored
@@ -181,7 +174,6 @@ const getData = async (key: string) => {
 
 const removeData = async (key: string) =>{
     try {
-        console.log( 'remove', key );
         await AsyncStorage.removeItem( key );
     } catch(e) {
         // remove error
@@ -352,12 +344,10 @@ export const emailSignIn = createAsyncThunk(
         if( !params.email || !params.password ){
             dispatch( setLoginFailed( ) );
         } else {
-            console.log( 'logging in now' );
             return axios.post( `http://localhost:3000${CONFIG.EMAIL_SIGNIN_PATH}.json`,
                 { email: params.email,
                   password: params.password } )
                 .then( resp=>{
-                    console.log( 'resp', resp );
                     //TODO resp contains the full user info
 
                     dispatch( addMessage( t( 'sessions.signed_in'), new Date(), Priorities.INFO ))
@@ -448,7 +438,6 @@ export const signOut = createAsyncThunk(
             .then( resp=>{
                 dispatch( clearProfile() );
                 dispatch( setLoggedOut( ) );
-                console.log( 'logging out' );
                 CONFIG.deleteData( CONFIG.SAVED_CREDS_KEY );
                 CONFIG.retrieveResources( dispatch, getState )
                     .then( () =>{

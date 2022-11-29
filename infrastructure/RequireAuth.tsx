@@ -8,7 +8,6 @@ export default function RequireAuth({ children }) {
   const isLoggingIn = useTypedSelector( (state)=>state.context.status.loggingIn );
   const location = useLocation( );
 
-  console.log( 'requiring auth' );
   if( isLoggedIn ) {
 
     return children;
