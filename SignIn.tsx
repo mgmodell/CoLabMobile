@@ -22,7 +22,7 @@ import {
   emailSignUp
 } from "./infrastructure/ContextSlice";
 
-import { GoogleLogin } from "react-google-login";
+//import { GoogleLogin } from "react-google-login";
 import { useTypedSelector } from "./infrastructure/AppReducers";
 import axios from "axios";
 
@@ -71,8 +71,6 @@ export default function SignIn(props) {
         !EmailValidator.validate(email)
       }
       onPress={() => {
-        console.log( 'login button' );
-
         dispatch(emailSignIn({email, password}));
       }}
     >

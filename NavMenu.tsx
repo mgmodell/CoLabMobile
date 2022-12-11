@@ -2,8 +2,14 @@ import React, { useState } from 'react';
 import { View } from 'react-native';
 import { Button, Menu, Divider } from 'react-native-paper';
 
+import { useDispatch } from 'react-redux';
+import {
+    signOut
+} from "./infrastructure/ContextSlice";
 
 export default function NavMenu( props ) {
+    const dispatch = useDispatch();
+
     const [visible, setVisible] = useState( false );
 
     const openMenu = ()=> setVisible( true );
@@ -19,7 +25,10 @@ export default function NavMenu( props ) {
           <Menu.Item onPress={() => {}} title="Item 1" />
           <Menu.Item onPress={() => {}} title="Item 2" />
           <Divider />
-          <Menu.Item onPress={() => {}} title="Item 3" />
+          <Menu.Item onPress={() => {
+            console.log( 'logging out' );
+            dispatch( signOut( ) );
+          }} title="Logout" />
         </Menu>
     )
 }

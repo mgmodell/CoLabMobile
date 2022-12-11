@@ -39,10 +39,11 @@ export default function NavShell(props) {
   }
 
 
+
   if( isLoggedIn ){
 
     mainStack = (<Stack.Screen
-                  name='Log In'
+                  name='Logged In'
                   component={LoggedInMessage}
                   options={({navigationBarColor, route }) =>({
                     headerTitle: 'CoLab',

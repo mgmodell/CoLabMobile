@@ -10,8 +10,6 @@ import i18n from './i18n';
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const hostUrl = 'http://localhost:3000';
-
 const category = 'devise';
 const t = i18n.getFixedT( null, category );
 
@@ -121,7 +119,6 @@ const CONFIG = {
     retrieveResources: function( dispatch: Function, getState: Function ){
         const endPointsUrl = getState()['context']['config']['endpoint_url'];
 
-
         return axios.get( endPointsUrl + '.json',
             { withCredentials: true } )
             .then( resp =>{
@@ -191,6 +188,7 @@ export interface ContextRootState {
     };
     config: {
         localStorage?: boolean;
+        host?: string;
         endpoint_url?: string;
     };
     lookups: { 
@@ -215,6 +213,7 @@ const initialState : ContextRootState = {
     },
     config: {
         localStorage: null,
+        host: null,
         endpoint_url: null,
     },
     lookups: {
@@ -230,6 +229,7 @@ const initialState : ContextRootState = {
     endpoints: { },
 }
 
+
 const contextSlice = createSlice({
     name: 'context',
     initialState: initialState,
@@ -240,8 +240,17 @@ const contextSlice = createSlice({
             }
         },
         setEndPointUrl: {
-            reducer: (state, action ) =>{
-                state.config.endpoint_url = action.payload;
+            reducer: (state, action ) => {
+                state.config.host = action.payload.host;
+                state.config.endpoint_url = action.payload.host + action.payload.endPointUrl;
+            },
+            prepare: (host: string, endPointUrl: string ) => {
+                return{
+                    payload:{
+                        host: host,
+                        endPointUrl: endPointUrl
+                    }
+                }
             }
         },
         setLoggingIn: {
@@ -256,6 +265,14 @@ const contextSlice = createSlice({
                 state.status.loggingIn = false;
                 state.status.loggedIn = true;
                 state.lookups = action.payload.lookups;
+
+                Object.keys( action.payload.endpoints ).forEach( (key, index ) =>{
+                    const epList = action.payload.endpoints[ key ];
+                    Object.keys( epList ).forEach( (subKey, subIndex ) =>{
+                        action.payload.endpoints[key][subKey] = state.config.host + epList[ subKey ];
+                    })
+
+                })
                 state.endpoints = action.payload.endpoints;
                 state.status.endpointsLoaded = true;
                 state.status.lookupsLoaded = true;
@@ -286,6 +303,7 @@ const contextSlice = createSlice({
         },
         setEndPoints: {
             reducer: (state, action) => {
+
                 state.endpoints = action.payload;
                 state.status.endpointsLoaded = true;
             }
@@ -301,12 +319,11 @@ const contextSlice = createSlice({
 
 export const getContext = createAsyncThunk(
     'context/getContext',
-    async ( endPointsUrl: string, thunkAPI ) => {
+    async (initData: {host: string, endPointsUrl: string }, thunkAPI ) => {
         const dispatch = thunkAPI.dispatch;
         const getState = thunkAPI.getState;
 
-        var counter = 0;
-        dispatch( setEndPointUrl( endPointsUrl ) );
+        dispatch( setEndPointUrl( initData.host, initData.endPointsUrl ) );
 
         dispatch( setLoggingIn( {} ) );
         axios.interceptors.request.use( CONFIG.appendAuthHeaders );
@@ -344,7 +361,7 @@ export const emailSignIn = createAsyncThunk(
         if( !params.email || !params.password ){
             dispatch( setLoginFailed( ) );
         } else {
-            return axios.post( `http://localhost:3000${CONFIG.EMAIL_SIGNIN_PATH}.json`,
+            return axios.post( `${getState().context.config.host}${CONFIG.EMAIL_SIGNIN_PATH}.json`,
                 { email: params.email,
                   password: params.password } )
                 .then( resp=>{
@@ -378,7 +395,7 @@ export const emailSignUp = createAsyncThunk(
             dispatch( setLoginFailed( ) );
 
         } else {
-            return axios.post( CONFIG.EMAIL_REGISTRATION_PATH + '.json',
+            return axios.post( `${getState().context.config.host}${CONFIG.EMAIL_REGISTRATION_PATH}.json`,
                 {
                     email: params.email,
                     first_name: params.firstName,
@@ -429,12 +446,13 @@ export const oAuthSignIn = createAsyncThunk(
 
 export const signOut = createAsyncThunk(
     'context/signOut',
-    async( thunkAPI ) => {
+    async( params, thunkAPI ) => {
         const dispatch = thunkAPI.dispatch;
         const getState = thunkAPI.getState;
 
+
         if( getState().context.status.loggedIn){
-            return axios.delete( CONFIG.SIGN_OUT_PATH, {} )
+            return axios.delete( `${getState().context.config.host}${CONFIG.SIGN_OUT_PATH}`, {} )
             .then( resp=>{
                 dispatch( clearProfile() );
                 dispatch( setLoggedOut( ) );
@@ -445,6 +463,11 @@ export const signOut = createAsyncThunk(
                     });
 
             })
+            .catch( error=>{
+                //Handle a failed logout properly
+                console.log( 'logout error', error );
+            })
+            //Navigate home
         }
 
     }

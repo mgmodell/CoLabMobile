@@ -23,7 +23,11 @@ export default function AppInit(props: Props ) {
 
   useEffect( ()=> {
     //dispatch( authConfig()  )
-    dispatch( getContext( props.endpointsUrl ) );
+    dispatch( getContext(
+      {
+        host: props.host,
+        endPointsUrl: props.endpointsUrl
+      } ) );
     setInterval(function(){ 
       //this code runs every minute 
       dispatch( cleanUpMsgs( ) );
@@ -44,5 +48,6 @@ export default function AppInit(props: Props ) {
 }
 
 AppInit.propTypes = {
-  endpointsUrl: PropTypes.string.isRequired
+  endpointsUrl: PropTypes.string.isRequired,
+  host: PropTypes.string.isRequired,
 }

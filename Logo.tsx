@@ -18,6 +18,7 @@ import Svg, { Line, Stop, LinearGradient, Circle, G } from 'react-native-svg';
 
   }
 
+
 export default function Logo(props) {
 
   const height = props.height || 72;
