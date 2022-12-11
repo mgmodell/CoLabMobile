@@ -1,1 +1,1 @@
-npx react-native run-ios
+yarn react-native run-ios
