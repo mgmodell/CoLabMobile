@@ -29,11 +29,13 @@ export default function NavShell(props) {
 
   let mainStack = (<Stack.Screen name='Splash' component={SplashLoading}/>);
 
-  // Dennis, replace this with your component
-  const LoggedInMessage = ()=>{
+  // Update this.
+  const LoggedInMessage = ({ route, navigation })=>{
+    const {title, text} = route.params;
     return(
       <View>
-        <Text variant='displayLarge'>I love you!</Text>
+        <Text variant='displayLarge'>{title}</Text>
+        <Text variant='displaySmall'>{text}</Text>
       </View>
     );
   }
@@ -44,7 +46,14 @@ export default function NavShell(props) {
 
     mainStack = (<Stack.Screen
                   name='Logged In'
+                  // Dennis import your screen and replace 'LoggedInMessage' here with yours.
                   component={LoggedInMessage}
+                  initialParams={
+                    {
+                      title: 'Logged In',
+                      text: 'I love you!'
+                    }
+                  }
                   options={({navigationBarColor, route }) =>({
                     headerTitle: 'CoLab',
                     headerRight: () => (
