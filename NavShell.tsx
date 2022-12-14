@@ -1,86 +1,121 @@
-import React, { useState, useEffect, Suspense } from "react";
-import PropTypes from "prop-types";
-
-import { Text, Provider } from "react-native-paper";
-import {View} from 'react-native'
-
-import SplashLoading from "./SplashLoading";
-import SignIn from "./SignIn";
+import React, {useState, useMemo, useCallback} from 'react';
+import {StyleSheet, Text, View, TextStyle} from 'react-native';
+import {CalendarList, DateData} from 'react-native-calendars';
 
 
-import { NavigationContainer } from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
+const RANGE = 24;
+const initialDate = '2022-12-09';
+const nextWeekDate = '2022-12-16';
+const nextMonthDate = '2023-01-05';
 
-import { useTranslation } from "react-i18next";
-import { useTypedSelector } from "./infrastructure/AppReducers";
-import NavMenu from "./NavMenu";
+interface Props {
+  horizontalView?: boolean;
+}
 
-export default function NavShell(props) {
-  const { t, i18n } = useTranslation();
+const CalendarListScreen = (props: Props) => {
+  const {horizontalView} = props;
+  const [selected, setSelected] = useState(initialDate);
+  const marked = useMemo(() => {
+    return {
+      [nextWeekDate]: {
+        selected: selected === nextWeekDate,
+        selectedTextColor: '#5E60CE',
+        marked: true
+      },
+      [nextMonthDate]: {
+        selected: selected === nextMonthDate,
+        selectedTextColor: '#5E60CE',
+        marked: false
+      },
+      [selected]: {
+        selected: true,
+        disableTouchEvent: true,
+        selectedColor: '#5E60CE',
+        selectedTextColor: 'white'
+      }
+    };
+  }, [selected]);
 
-  const isLoggedIn = useTypedSelector(state => state.context.status.loggedIn);
-  const loggingIn = useTypedSelector(state => state.context.status.loggingIn);
-
-  const Stack = createNativeStackNavigator();
-
-  const endpointsLoaded = useTypedSelector(
-    state => state.context.status.endpointsLoaded
-  );
-
-  let mainStack = (<Stack.Screen name='Splash' component={SplashLoading}/>);
-
-  // Update this.
-  const LoggedInMessage = ({ route, navigation })=>{
-    const {title, text} = route.params;
-    return(
-      <View>
-        <Text variant='displayLarge'>{title}</Text>
-        <Text variant='displaySmall'>{text}</Text>
-      </View>
-    );
-  }
-
-
-
-  if( isLoggedIn ){
-
-    mainStack = (<Stack.Screen
-                  name='Logged In'
-                  // Dennis import your screen and replace 'LoggedInMessage' here with yours.
-                  component={LoggedInMessage}
-                  initialParams={
-                    {
-                      title: 'Logged In',
-                      text: 'I love you!'
-                    }
-                  }
-                  options={({navigationBarColor, route }) =>({
-                    headerTitle: 'CoLab',
-                    headerRight: () => (
-                      <NavMenu />
-                    )
-                  })}
-                  />);
-
-
-  } else if( !loggingIn ){
-    mainStack = (<Stack.Screen name='Log In' component={SignIn} />);
-
-  };
-
+  const onDayPress = useCallback((day: DateData) => {
+    setSelected(day.dateString);
+  }, []);
 
   return (
-    <Provider>
+    <CalendarList
+      
+      current={initialDate}
+      pastScrollRange={RANGE}
+      futureScrollRange={RANGE}
+      onDayPress={onDayPress}
+      markedDates={marked}
+      renderHeader={!horizontalView ? renderCustomHeader : undefined}
+      calendarHeight={!horizontalView ? 390 : undefined}
+      theme={!horizontalView ? theme : undefined}
+      horizontal={horizontalView}
+      pagingEnabled={horizontalView}
+      staticHeader={horizontalView}
+    />
+  );
+};
 
-    <NavigationContainer>
-      <Stack.Navigator>
-        { mainStack }
-      </Stack.Navigator>
-    </NavigationContainer>
-    </Provider>
+const theme = {
+  stylesheet: {
+    calendar: {
+      header: {
+        dayHeader: {
+          fontWeight: '600',
+          color: '#48BFE3'
+        }
+      }
+    }
+  },
+  'stylesheet.day.basic': {
+    today: {
+      borderColor: '#48BFE3',
+      borderWidth: 0.8
+    },
+    todayText: {
+      color: '#5390D9',
+      fontWeight: '800'
+    }
+  }
+};
+
+function renderCustomHeader(date: any) {
+  const header = date.toString('MMMM yyyy');
+  const [month, year] = header.split(' ');
+  const textStyle: TextStyle = {
+    fontSize: 18,
+    fontWeight: 'bold',
+    paddingTop: 10,
+    paddingBottom: 10,
+    color: '#5E60CE',
+    paddingRight: 5
+  };
+
+  return (
+    <View style={styles.header}>
+      <Text style={[styles.month, textStyle]}>{`${month}`}</Text>
+      <Text style={[styles.year, textStyle]}>{year}</Text>
+    </View>
   );
 }
 
-NavShell.propTypes = {
+export default CalendarListScreen;
 
-};
+const styles = StyleSheet.create({
+  header: {
+    flexDirection: 'row',
+    width: '100%',
+    justifyContent: 'space-between',
+    marginTop: 10,
+    marginBottom: 10
+  },
+  month: {
+    marginLeft: 5
+  },
+  year: {
+    marginRight: 5
+  }
+});
+
