@@ -1,7 +1,7 @@
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import Slider from '@react-native-community/slider';
-import { Button } from '@rneui/base';
+import { Button } from 'react-native-paper';
 
 export default function CheckInScreen( {navigation, route}){
     //console.log(  props.navigation, props.route);
@@ -84,7 +84,7 @@ export default function CheckInScreen( {navigation, route}){
              
           });
         }}
-      />
+      >return to Previous Dimension</Button>
      <Text></Text>
       <Button
         title="return to Previous Dimension"
@@ -96,7 +96,7 @@ export default function CheckInScreen( {navigation, route}){
              
           });
         }}
-      />
+      >return to Previous Dimension</Button>
     </View>  
   );  
 }
