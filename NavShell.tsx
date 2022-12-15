@@ -14,6 +14,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { useTranslation } from "react-i18next";
 import { useTypedSelector } from "./infrastructure/AppReducers";
 import NavMenu from "./NavMenu";
+import CalendarListScreen from './CalendarListScreen';
 
 export default function NavShell(props) {
   const { t, i18n } = useTranslation();
@@ -29,6 +30,7 @@ export default function NavShell(props) {
 
   let mainStack = (<Stack.Screen name='Splash' component={SplashLoading}/>);
 
+
   // Update this.
   const LoggedInMessage = ({ route, navigation })=>{
     const {title, text} = route.params;
@@ -40,14 +42,12 @@ export default function NavShell(props) {
     );
   }
 
-
-
   if( isLoggedIn ){
 
     mainStack = (<Stack.Screen
                   name='Logged In'
                   // Dennis import your screen and replace 'LoggedInMessage' here with yours.
-                  component={LoggedInMessage}
+                  component={CalendarListScreen}
                   initialParams={
                     {
                       title: 'Logged In',
