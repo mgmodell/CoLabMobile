@@ -4,21 +4,6 @@ import PropTypes from "prop-types";
 import Svg, { Line, Stop, LinearGradient, Circle, G } from 'react-native-svg';
 
 
-  if (global.__fbBatchedBridge) {
-    const origMessageQueue = global.__fbBatchedBridge;
-    const modules = origMessageQueue._remoteModuleTable;
-    const methods = origMessageQueue._remoteMethodTable;
-    global.findModuleByModuleAndMethodIds = (moduleId, methodId) => {
-      console.log(`The problematic line code is in: ${moduleId}:${modules[moduleId]}.${methodId}:${methods[moduleId][methodId]}`)
-    }
-    global.findModuleByModuleAndMethodIds(47,17);
-    global.findModuleByModuleAndMethodIds(70,1);
-    global.findModuleByModuleAndMethodIds(70,0);
-    global.findModuleByModuleAndMethodIds(47,6);
-
-  }
-
-
 export default function Logo(props) {
 
   const height = props.height || 72;
