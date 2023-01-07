@@ -1,4 +1,4 @@
-import React, { useState, useEffect, Suspense } from "react";
+import React, { useState, useMemo, useEffect, Suspense } from "react";
 import PropTypes from "prop-types";
 
 import { Text, Provider } from "react-native-paper";
@@ -28,7 +28,6 @@ export default function NavShell(props) {
     state => state.context.status.endpointsLoaded
   );
 
-  let mainStack = (<Stack.Screen name='Splash' component={SplashLoading}/>);
 
 
   // Update this.
@@ -42,31 +41,38 @@ export default function NavShell(props) {
     );
   }
 
-  if( isLoggedIn ){
+  const mainStack = useMemo( ()=>{
 
-    mainStack = (<Stack.Screen
-                  name='Logged In'
-                  // Dennis import your screen and replace 'LoggedInMessage' here with yours.
-                  component={CalendarListScreen}
-                  initialParams={
-                    {
-                      title: 'Logged In',
-                      text: 'I love you!'
+    if( isLoggedIn ){
+
+      return (<Stack.Screen
+                    name='Logged In'
+                    // Dennis import your screen and replace 'LoggedInMessage' here with yours.
+                    component={CalendarListScreen}
+                    initialParams={
+                      {
+                        title: 'Logged In',
+                        text: 'I love you!'
+                      }
                     }
-                  }
-                  options={({navigationBarColor, route }) =>({
-                    headerTitle: 'CoLab',
-                    headerRight: () => (
-                      <NavMenu />
-                    )
-                  })}
-                  />);
+                    options={({navigationBarColor, route }) =>({
+                      headerTitle: 'CoLab',
+                      headerRight: () => (
+                        <NavMenu />
+                      )
+                    })}
+                    />);
 
 
-  } else if( !loggingIn ){
-    mainStack = (<Stack.Screen name='Log In' component={SignIn} />);
+    } else if( !loggingIn ){
+      return (<Stack.Screen name='Log In' component={SignIn} />);
 
-  };
+    } else {
+      return (<Stack.Screen name='Splash' component={SplashLoading}/>);
+
+    };
+
+  }, [isLoggedIn, loggingIn]);
 
 
   return (

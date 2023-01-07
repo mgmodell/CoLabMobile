@@ -7,6 +7,9 @@ import {
   View,
   TextStyle} from 'react-native';
 import {Calendar, DateData} from 'react-native-calendars';
+import {
+  List
+} from 'react-native-paper';
 
 import { useDispatch } from 'react-redux';
 import { startTask, endTask } from './infrastructure/StatusSlice';
@@ -50,7 +53,9 @@ const CalendarListScreen = (props: Props) => {
     dispatch(startTask());
     axios.get(url, {}).then(resp => {
       //Process the data
+
       const data = resp.data;
+      console.log( data );
       data["tasks"].forEach((value, index, array) => {
         switch (value.type) {
           case "assessment":
@@ -106,7 +111,7 @@ const CalendarListScreen = (props: Props) => {
   const marked = useMemo(() => {
     const markedMap = {};
     tasks.forEach( task =>{
-      console.log( task );
+
       const start = new Date( task.start_date ).toISOString( ).split( 'T' )[0];
       const end = new Date( task.end_date ).toISOString( ).split( 'T' )[0];
       markedMap[ start ] = {
@@ -125,7 +130,7 @@ const CalendarListScreen = (props: Props) => {
         selectedColor: '#5E60CE',
         selectedTextColor: 'white'
     }
-    console.log( markedMap );
+    console.log( 'markedMap', markedMap );
     return markedMap;
     return {
       [nextWeekDate]: {
@@ -150,6 +155,15 @@ const CalendarListScreen = (props: Props) => {
   const onDayPress = useCallback((day: DateData) => {
     setSelected(day.dateString);
   }, []);
+
+  const taskList= tasks.map( (task) =>{
+            return(
+              <List.Item
+                title={task.name}
+                key={task.id}
+              />
+             )
+          } );
 
   return (
     <React.Fragment>
@@ -177,6 +191,9 @@ const CalendarListScreen = (props: Props) => {
       </View>
       <View style={{ flex: .5}} >
         <Text>Hello</Text>
+        <ScrollView>
+          {taskList}
+        </ScrollView>
 
       </View>
     </View>

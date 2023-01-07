@@ -31,20 +31,11 @@ export default function AppInit(props: Props ) {
     setInterval(function(){ 
       //this code runs every minute 
       dispatch( cleanUpMsgs( ) );
-  }, 6000);
+    }, 6000);
     
   }, [] )
 
-
-  return props.children;
-  /*
-  if( !initialised || undefined === props.children ){
-    return (<SplashLoading />);
-  }else{
-    return props.children;
-
-  }
-  */
+  //return props.children;
 }
 
 AppInit.propTypes = {

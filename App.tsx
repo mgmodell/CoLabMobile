@@ -51,10 +51,9 @@ const App = () => {
       <Provider store={store}>
         <AppInit
           host={HOST}
-          endpointsUrl={ENDPOINTS_URL} >
+          endpointsUrl={ENDPOINTS_URL} />
             
           <NavShell />
-        </AppInit>
       </Provider>
     </SafeAreaProvider>
 
