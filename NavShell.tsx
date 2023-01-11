@@ -15,6 +15,7 @@ import { useTranslation } from "react-i18next";
 import { useTypedSelector } from "./infrastructure/AppReducers";
 import NavMenu from "./NavMenu";
 import CalendarListScreen from './CalendarListScreen';
+import CheckInScreen from "./CheckInScreen";
 
 export default function NavShell(props) {
   const { t, i18n } = useTranslation();
@@ -45,7 +46,8 @@ export default function NavShell(props) {
 
     if( isLoggedIn ){
 
-      return (<Stack.Screen
+      return (<>
+          <Stack.Screen
                     name='Logged In'
                     // Dennis import your screen and replace 'LoggedInMessage' here with yours.
                     component={CalendarListScreen}
@@ -61,7 +63,19 @@ export default function NavShell(props) {
                         <NavMenu />
                       )
                     })}
-                    />);
+                    />
+          <Stack.Screen
+                    name='Check In'
+                    component={CheckInScreen}
+                    options={({navigationBarColor, route }) =>({
+                      headerTitle: 'CoLab',
+                      headerRight: () => (
+                        <NavMenu />
+                      )
+                    })}
+                    />
+        </>
+                    );
 
 
     } else if( !loggingIn ){

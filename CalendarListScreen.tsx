@@ -6,7 +6,7 @@ import {
   Text,
   View,
   TextStyle} from 'react-native';
-import {Calendar, DateData} from 'react-native-calendars';
+import {CalendarList, DateData} from 'react-native-calendars';
 import {
   List
 } from 'react-native-paper';
@@ -26,8 +26,11 @@ interface Props {
   horizontalView?: boolean;
 }
 
-const CalendarListScreen = (props: Props) => {
+//export default function CheckInScreen( {navigation, route}){
+
+export default function CalendarListScreen (props: Props) {
   const category = 'home';
+  console.log( 'props', props );
   const endpoints = useTypedSelector(
     state => state.context.endpoints[category]
   );
@@ -161,6 +164,19 @@ const CalendarListScreen = (props: Props) => {
               <List.Item
                 title={task.name}
                 key={task.id}
+                description={task.type}
+                onPress={()=>{
+                  if( task.type === 'assessment' ){
+                    props.navigation.navigate( 'Check In',{
+                      assessmentId: task.id,
+                      groupName: task.group_name,
+                      name: task.name,
+                      courseName: task.course_name
+                    })
+                  } else {
+                    console.log( `${task.type} not implemented yet`);
+                  }
+                }}
               />
              )
           } );
@@ -170,7 +186,7 @@ const CalendarListScreen = (props: Props) => {
     <View style={{flex: 1}}>
       <View style={{ flex: .5 }} >
 
-        <Calendar
+        <CalendarList
 
           markingType='period'
           current={initialDate}
@@ -244,7 +260,6 @@ function renderCustomHeader(date: any) {
   );
 }
 
-export default CalendarListScreen;
 
 const styles = StyleSheet.create({
   header: {
