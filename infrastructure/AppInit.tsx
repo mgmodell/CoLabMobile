@@ -5,11 +5,10 @@ import {cleanUpMsgs} from './StatusSlice';
 import { useTypedSelector } from "./AppReducers";
 import SplashLoading from "../SplashLoading";
 
-import PropTypes from "prop-types";
-
 type Props = {
   children?: React.ReactNode,
-  endpointsUrl,
+  host: string,
+  endpointsUrl: string,
 };
 
 export default function AppInit(props: Props ) {
@@ -38,7 +37,4 @@ export default function AppInit(props: Props ) {
   //return props.children;
 }
 
-AppInit.propTypes = {
-  endpointsUrl: PropTypes.string.isRequired,
-  host: PropTypes.string.isRequired,
-}
+AppInit.propTypes = {};

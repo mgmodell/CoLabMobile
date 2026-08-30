@@ -474,6 +474,6 @@ export const signOut = createAsyncThunk(
 )
 
 const {actions, reducer} = contextSlice;
-export const { setEndPoints, setAnonymize, setEndPointUrl, setLoggedIn, setLoggedOut,
+export const { setEndPoints, setEndPointUrl, setLoggedIn, setLoggedOut,
     setLoggingIn, setLookups, setInitialised, setLoginFailed } = actions;
 export default reducer;

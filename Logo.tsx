@@ -1,5 +1,4 @@
 import React, { useEffect, useState, useRef } from "react";
-import PropTypes from "prop-types";
 
 import Svg, { Line, Stop, LinearGradient, Circle, G } from 'react-native-svg';
 
@@ -144,8 +143,8 @@ export default function Logo(props) {
   );
 
   Logo.propTypes = {
-    height: PropTypes.number,
-    width: PropTypes.number,
-    spinning: PropTypes.bool
+    height: undefined,
+    width: undefined,
+    spinning: undefined
   };
 }

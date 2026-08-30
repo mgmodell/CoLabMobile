@@ -1,5 +1,4 @@
 import React, { useState, useEffect, Suspense } from "react";
-import PropTypes from "prop-types";
 
 import { 
   View,
@@ -51,6 +50,4 @@ export default function SplashLoading(props) {
   );
 }
 
-SplashLoading.propTypes = {
-
-};
+SplashLoading.propTypes = {};

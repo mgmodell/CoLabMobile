@@ -1,5 +1,4 @@
 import React, { useState, useMemo, useEffect, Suspense } from "react";
-import PropTypes from "prop-types";
 
 import { Text, Provider } from "react-native-paper";
 import {View} from 'react-native'
@@ -57,7 +56,7 @@ export default function NavShell(props) {
                         text: 'I love you!'
                       }
                     }
-                    options={({navigationBarColor, route }) =>({
+                    options={({navigation, route}) =>({
                       headerTitle: 'CoLab',
                       headerRight: () => (
                         <NavMenu />
@@ -67,7 +66,7 @@ export default function NavShell(props) {
           <Stack.Screen
                     name='Check In'
                     component={CheckInScreen}
-                    options={({navigationBarColor, route }) =>({
+                    options={({navigation, route}) =>({
                       headerTitle: 'CoLab',
                       headerRight: () => (
                         <NavMenu />
@@ -101,6 +100,4 @@ export default function NavShell(props) {
   );
 }
 
-NavShell.propTypes = {
-
-};
+NavShell.propTypes = {};
