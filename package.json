@@ -32,9 +32,11 @@
     "react-redux": "^9.3.0"
   },
   "devDependencies": {
-    "@babel/core": "^8.0.1",
-    "@babel/runtime": "^8.0.0",
+    "@babel/core": "^7.29.7",
+    "@babel/runtime": "^7.29.7",
     "@react-native-community/eslint-config": "^3.2.0",
+    "@react-native/babel-preset": "0.87.1",
+    "@react-native/jest-preset": "0.87.1",
     "@tsconfig/react-native": "^3.0.9",
     "@types/jest": "^30.0.0",
     "@types/react": "^19.2.18",
@@ -45,12 +47,13 @@
     "babel-jest": "^30.5.0",
     "eslint": "^10.9.1",
     "jest": "^30.5.0",
-    "metro-react-native-babel-preset": "0.77.0",
+    "@react-native/babel-preset": "0.87.1",
     "react-test-renderer": "19.2.8",
     "typescript": "^5.9.3"
   },
   "jest": {
-    "preset": "react-native",
+    "preset": "@react-native/jest-preset",
+    "resolver": "./jest/resolver.js",
     "moduleFileExtensions": [
       "ts",
       "tsx",
@@ -58,6 +61,9 @@
       "jsx",
       "json",
       "node"
+    ],
+    "transformIgnorePatterns": [
+      "node_modules/(?!((jest-)?react-native|@react-native(-community)?|react-redux|@reduxjs|@react-navigation|react-i18next|i18next|@react-native-async-storage|react-native-paper|react-native-safe-area-context|react-native-screens|react-native-svg|react-native-calendars|immer)/)"
     ]
   }
 }

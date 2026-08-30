@@ -49,7 +49,7 @@ export default function CheckInScreen( {navigation, route}){
       );
       const user = useTypedSelector(state => state.profile.user);
       const dispatch = useDispatch( );
-      const [t, i18n] = useTranslation( 'installments' );
+      const { t, i18n } = useTranslation( 'installments' );
 
       const [dirty, setDirty] = useState( false );
       const [project, setProject] = useState( {} );
